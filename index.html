@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>OmniTravel — AI-Powered Travel Planning</title>
+  <meta name="description" content="Enter your dates, budget, and destination. OmniTravel builds your perfect itinerary instantly — flights, hotels, and activities in one place." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav>
+    <span class="logo">OmniTravel</span>
+    <button onclick="document.getElementById('hero-email').focus()">Join waitlist</button>
+  </nav>
+
+  <section class="hero">
+    <div class="badge"><i class="ti ti-sparkles"></i> AI-powered travel planning</div>
+    <h1>Your perfect trip,<br><span>built around your life.</span></h1>
+    <p>Tell us your dates, budget, and destination. OmniTravel handles everything else — flights, hotels, activities, and more — in one place.</p>
+    <div class="form-row">
+      <input type="email" id="hero-email" placeholder="Enter your email" />
+      <button onclick="signup('hero-email','hero-success')">Get early access</button>
+    </div>
+    <p class="hint">Free to join. No credit card required.</p>
+    <p id="hero-success" class="success"></p>
+    <div class="social-proof">
+      <div class="avatars">
+        <div class="av av1">A</div>
+        <div class="av av2">J</div>
+        <div class="av av3">M</div>
+        <div class="av av4">R</div>
+        <div class="av av5">K</div>
+      </div>
+      <p><strong>500+</strong> travelers already on the waitlist</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="problem">
+    <p class="label">The problem</p>
+    <h2>"We should take a trip" shouldn't mean hours of research.</h2>
+    <p>Between juggling flight prices, hotel availability, activity costs, and everyone's schedule — planning a trip feels like a part-time job. OmniTravel eliminates all of it.</p>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="features">
+    <p class="label">What we do</p>
+    <h2>Everything you need, nothing you don't.</h2>
+    <p class="section-sub">Built for real travelers with real constraints.</p>
+    <div class="grid">
+      <div class="card">
+        <div class="icon purple"><i class="ti ti-adjustments-horizontal"></i></div>
+        <h3>Constraint-first planning</h3>
+        <p>Set your budget, dates, and destination. We build around what actually works for you.</p>
+      </div>
+      <div class="card">
+        <div class="icon teal"><i class="ti ti-sparkles"></i></div>
+        <h3>AI-optimized itineraries</h3>
+        <p>Get a complete day-by-day plan instantly — flights, hotels, and activities included.</p>
+      </div>
+      <div class="card">
+        <div class="icon amber"><i class="ti ti-users"></i></div>
+        <h3>Solo or group travel</h3>
+        <p>Planning alone or with friends? Everyone inputs privately, we find what works for all.</p>
+      </div>
+      <div class="card">
+        <div class="icon coral"><i class="ti ti-check"></i></div>
+        <h3>One-tap booking</h3>
+        <p>Approve your itinerary and book everything in a single confirmation. No more tab switching.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section class="how">
+    <p class="label">How it works</p>
+    <h2>From idea to booked in minutes.</h2>
+    <p class="section-sub">No research. No spreadsheets. No group chat chaos.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h3>Enter your constraints</h3>
+          <p>Tell us your destination, travel dates, and total budget. Solo traveler or a group — everyone inputs their own preferences privately.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h3>AI builds your itinerary</h3>
+          <p>OmniTravel finds the optimal combination of flights, hotels, car rentals, and activities that fits your constraints simultaneously.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h3>Review and adjust</h3>
+          <p>See your full itinerary with a cost breakdown. Tweak anything you want — swap hotels, change flights, add activities.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h3>Book everything at once</h3>
+          <p>One confirmation. Everything booked. The trip is finally happening.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta">
+    <h2>The trip stops being an idea<br>the moment you use OmniTravel.</h2>
+    <p>Join the waitlist and be first to experience travel planning the way it should be.</p>
+    <div class="form-row">
+      <input type="email" id="bottom-email" placeholder="Enter your email" />
+      <button onclick="signup('bottom-email','bottom-success')">Get early access</button>
+    </div>
+    <p class="hint">Free to join. No credit card required.</p>
+    <p id="bottom-success" class="success"></p>
+  </section>
+
+  <footer>
+    <p>© 2026 OmniTravel. All rights reserved.</p>
+    <div>
+      <button>Privacy</button>
+      <button>Terms</button>
+      <button>Contact</button>
+    </div>
+  </footer>
+
+  <script>
+    function signup(inputId, successId) {
+      const val = document.getElementById(inputId).value;
+      const msg = document.getElementById(successId);
+      if (val && val.includes('@')) {
+        msg.textContent = "You're on the list. We'll be in touch soon. ✓";
+        msg.style.display = 'block';
+        document.getElementById(inputId).value = '';
+      } else {
+        document.getElementById(inputId).focus();
+      }
+    }
+  </script>
+
+</body>
+</html>
