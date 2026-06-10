@@ -136,18 +136,39 @@
   </footer>
 
   <script>
-    function signup(inputId, successId) {
-      const val = document.getElementById(inputId).value;
-      const msg = document.getElementById(successId);
-      if (val && val.includes('@')) {
+  async function signup(inputId, successId) {
+    const val = document.getElementById(inputId).value;
+    const msg = document.getElementById(successId);
+    if (!val || !val.includes('@')) {
+      document.getElementById(inputId).focus();
+      return;
+    }
+    try {
+      const response = await fetch('https://api.brevo.com/v3/contacts', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'api-key': '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'
+        },
+        body: JSON.stringify({
+          email: val,
+          listIds: [5],
+          updateEnabled: true
+        })
+      });
+      if (response.ok || response.status === 204) {
         msg.textContent = "You're on the list. We'll be in touch soon. ✓";
         msg.style.display = 'block';
         document.getElementById(inputId).value = '';
       } else {
-        document.getElementById(inputId).focus();
+        msg.textContent = "Something went wrong. Please try again.";
+        msg.style.display = 'block';
       }
+    } catch (error) {
+      msg.textContent = "Something went wrong. Please try again.";
+      msg.style.display = 'block';
     }
-  </script>
-
+  }
+</script>
 </body>
 </html>
