@@ -243,6 +243,9 @@
     </div>
   </footer>
 
+  <!-- Hidden sink: the Brevo form posts here so the visitor never leaves the page -->
+  <iframe name="brevo-sink" style="display:none" aria-hidden="true" tabindex="-1" title="Brevo signup"></iframe>
+
   <script>
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -280,8 +283,13 @@
       update();
     }
 
-    // Unified signup, used by both the hero and the bottom CTA
-    async function signup(inputId, successId) {
+    // Brevo hosted-form endpoint. This is a public form URL (safe to expose),
+    // unlike the secret API key the old code leaked into the page source.
+    const BREVO_FORM_ACTION = 'https://6b123c2e.sibforms.com/serve/MUIFAAIHmKT1JBLyjrNuaEW63PQE30D1W44QyhAay8TJjCGFiR-5cX8LMTNfulk58i-GIO5KHTjedc6ppvGf32ukVt42jEktlGKIFUgmJ8t8tCdAbIOQeZLCUMekrtKrT74B_cyThTQ7JiqH7eJnpcnqRHRC8jTfWURywSsAtHI4aTinDH52n8x_UzuDXtcdjcKl2Om-4jfKqjeR0A==';
+
+    // Unified signup for the hero and the bottom CTA. Submitting into the hidden
+    // iframe keeps the visitor on the page while Brevo records the contact.
+    function signup(inputId, successId) {
       const input = document.getElementById(inputId);
       const msg = document.getElementById(successId);
       const val = input.value.trim();
@@ -298,29 +306,30 @@
       btn.disabled = true;
       btn.textContent = 'Joining...';
 
-      try {
-        const response = await fetch('https://api.brevo.com/v3/contacts', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'api-key': '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'
-          },
-          body: JSON.stringify({ email: val, listIds: [5], updateEnabled: true })
-        });
+      const form = document.createElement('form');
+      form.action = BREVO_FORM_ACTION;
+      form.method = 'POST';
+      form.target = 'brevo-sink';
+      form.style.display = 'none';
 
-        if (response.ok || response.status === 204) {
-          msg.textContent = "You're on the list. We'll be in touch soon. ✓";
-          msg.style.display = 'block';
-          input.value = '';
-        } else {
-          msg.textContent = "Something went wrong. Please try again.";
-          msg.style.display = 'block';
-        }
-      } catch (err) {
-        msg.textContent = "Something went wrong. Please try again.";
-        msg.style.display = 'block';
-      }
+      // EMAIL = the address. email_address_check is Brevo's honeypot (stays empty
+      // for real people). locale matches the hosted form config.
+      const fields = { EMAIL: val, email_address_check: '', locale: 'en' };
+      Object.keys(fields).forEach(function (name) {
+        const field = document.createElement('input');
+        field.type = 'hidden';
+        field.name = name;
+        field.value = fields[name];
+        form.appendChild(field);
+      });
 
+      document.body.appendChild(form);
+      form.submit();
+      document.body.removeChild(form);
+
+      msg.textContent = "You're on the list. We'll be in touch soon. ✓";
+      msg.style.display = 'block';
+      input.value = '';
       btn.disabled = false;
       btn.textContent = original;
     }
