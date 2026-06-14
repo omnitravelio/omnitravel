@@ -1,5 +1,5 @@
 /* ============================================
-   OmniTravel — black & purple, flowy edition
+   OmniTravel - black & purple, flowy edition
    ============================================ */
 
 :root {
@@ -14,7 +14,7 @@
   --text3: #7c6fa6;
 
   /* Purple identity */
-  --purple: #8b5cf6;        /* violet-500 — primary */
+  --purple: #8b5cf6;        /* violet-500, primary */
   --purple-bright: #a78bfa; /* violet-400 */
   --purple-deep: #6d28d9;   /* violet-700 */
   --magenta: #c084fc;       /* purple-400 accent */
