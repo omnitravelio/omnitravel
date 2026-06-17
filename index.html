@@ -246,7 +246,7 @@
   <script>
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Scroll-triggered reveals
+    // ── Scroll-triggered 3D reveals ──────────────────────────────
     const reveals = document.querySelectorAll('.reveal');
     if (reduceMotion) {
       reveals.forEach(el => el.classList.add('visible'));
@@ -258,26 +258,106 @@
             observer.unobserve(e.target);
           }
         });
-      }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+      }, { threshold: 0.10, rootMargin: '0px 0px -6% 0px' });
       reveals.forEach(el => observer.observe(el));
     }
 
-    // Parallax depth on orbs + mockup
     if (!reduceMotion) {
-      const layers = document.querySelectorAll('[data-parallax]');
+      const mockupWrap   = document.querySelector('.mockup-wrap');
+      const heroVisual   = document.querySelector('.hero-visual');
+      const orbEl        = document.querySelector('.orb1');
+      const ctaOrb       = document.querySelector('.cta-orb');
+
+      // ── Scroll-driven 3D engine ──────────────────────────────────
       let ticking = false;
-      const update = () => {
-        const y = window.scrollY;
-        layers.forEach(el => {
-          const speed = parseFloat(el.dataset.parallax);
-          el.style.setProperty('--py', `${y * speed}px`);
+
+      function onScroll() {
+        if (ticking) return;
+        requestAnimationFrame(frame);
+        ticking = true;
+      }
+
+      function frame() {
+        const sy = window.scrollY;
+        const vh = window.innerHeight;
+
+        // Mockup laptop-tilt: flattens from 14° → 0° as it enters viewport
+        if (mockupWrap && heroVisual) {
+          const rect = heroVisual.getBoundingClientRect();
+          // progress: 0 when mockup top is at viewport bottom, 1 when fully in view
+          const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.65)));
+          const tilt = 14 * (1 - progress);
+          mockupWrap.style.transform = `rotateX(${tilt}deg)`;
+        }
+
+        // Orb parallax
+        if (orbEl)  orbEl.style.transform  = `translateY(${sy * 0.14}px)`;
+        if (ctaOrb) ctaOrb.style.transform = `translateY(${sy * 0.08}px)`;
+
+        // Section depth parallax — headings move slightly slower than scroll
+        document.querySelectorAll('.section-h').forEach(el => {
+          const rect = el.getBoundingClientRect();
+          const dist = (rect.top - vh * 0.5) / vh;
+          el.style.transform = `translateZ(0) translateY(${dist * -14}px)`;
         });
+
         ticking = false;
-      };
-      window.addEventListener('scroll', () => {
-        if (!ticking) { requestAnimationFrame(update); ticking = true; }
-      }, { passive: true });
-      update();
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      frame();
+
+      // ── Magnetic 3D hover on cards ───────────────────────────────
+      function addMagneticTilt(selector, maxRotate = 10, lift = 8) {
+        document.querySelectorAll(selector).forEach(card => {
+          card.addEventListener('mouseenter', () => {
+            card.style.transition = 'none';
+          });
+          card.addEventListener('mousemove', e => {
+            const r   = card.getBoundingClientRect();
+            const x   = (e.clientX - r.left) / r.width  - 0.5;
+            const y   = (e.clientY - r.top)  / r.height - 0.5;
+            const rY  =  x * maxRotate;
+            const rX  = -y * (maxRotate * 0.7);
+            card.style.transform =
+              `perspective(700px) rotateX(${rX}deg) rotateY(${rY}deg) translateZ(${lift}px)`;
+          });
+          card.addEventListener('mouseleave', () => {
+            card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform  = '';
+          });
+        });
+      }
+
+      addMagneticTilt('.pain-card', 10, 6);
+      addMagneticTilt('.feat-card', 8,  5);
+
+      // ── Pain cards stagger Z-depth on scroll ─────────────────────
+      const painCards = document.querySelectorAll('.pain-card');
+      const painObserver = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+          if (e.isIntersecting) {
+            const cards = [...painCards];
+            cards.forEach((card, i) => {
+              setTimeout(() => {
+                card.style.transition = `transform 0.9s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms,
+                                         opacity  0.8s ease ${i * 80}ms`;
+                card.style.opacity   = '1';
+                card.style.transform = 'perspective(800px) rotateX(0deg) translateZ(0)';
+              }, i * 60);
+            });
+            painObserver.disconnect();
+          }
+        });
+      }, { threshold: 0.15 });
+
+      // Set initial 3D state before observe
+      painCards.forEach((card, i) => {
+        const depths = [24, 16, 32];
+        card.style.opacity   = '0';
+        card.style.transform = `perspective(800px) rotateX(${6 + i}deg) translateZ(-${depths[i] || 20}px)`;
+      });
+      if (painCards[0]) painObserver.observe(painCards[0].closest('.pain-grid'));
     }
 
     // Brevo hosted-form endpoint. This is a public form URL (safe to expose),
