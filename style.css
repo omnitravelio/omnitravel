@@ -282,7 +282,7 @@ nav button:hover { color: var(--text1); }
 /* ---------- STATS ROW ---------- */
 .stats-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
@@ -720,8 +720,9 @@ footer button:hover { color: var(--text2); }
   .cta-section { padding: 80px 20px; }
   .cta-section h2 { font-size: 28px; }
   footer { flex-direction: column; gap: 14px; text-align: center; padding: 24px 20px; }
-  .stats-row { grid-template-columns: repeat(2, 1fr); }
-  .stat { padding: 24px 16px; }
+  .stats-row { grid-template-columns: 1fr; }
+  .stat { padding: 22px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .stat:last-child { border-bottom: none; }
   .stat-num { font-size: 28px; }
   .dest-grid {
     grid-template-columns: 1fr 1fr;
