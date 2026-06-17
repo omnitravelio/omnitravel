@@ -121,20 +121,20 @@
   <!-- STATS -->
   <div class="stats-row">
     <div class="stat">
-      <div class="stat-num">190+</div>
-      <div class="stat-label">Countries covered</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">400+</div>
-      <div class="stat-label">Airlines integrated</div>
-    </div>
-    <div class="stat">
-      <div class="stat-num">2M+</div>
-      <div class="stat-label">Hotels &amp; rentals</div>
-    </div>
-    <div class="stat">
       <div class="stat-num">$0</div>
-      <div class="stat-label">Booking fees, ever</div>
+      <div class="stat-label">Booking fees — ever</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">One</div>
+      <div class="stat-label">Platform for flights, hotels &amp; activities</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">&lt; 1 min</div>
+      <div class="stat-label">To generate a full itinerary</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2026</div>
+      <div class="stat-label">Target launch — join the waitlist now</div>
     </div>
   </div>
 
@@ -206,49 +206,97 @@
 
   <!-- DESTINATIONS -->
   <section class="content" style="padding-top: 0">
-    <div class="eyebrow reveal">Popular routes</div>
-    <h2 class="section-h reveal">Anywhere you want to go.</h2>
-    <p class="section-p reveal">Real flights. Real hotels. Real prices. OmniTravel connects to live inventory across 400+ airlines and 2 million properties worldwide.</p>
+    <div class="eyebrow reveal">Dream further</div>
+    <h2 class="section-h reveal">Where do you want to go?</h2>
+    <p class="section-p reveal">Tell OmniTravel your destination and it builds the whole trip — flights, hotels, and activities — all compared and organized in one place, the way planning should work.</p>
     <div class="dest-grid">
-      <div class="dest-card dest-tall" style="--img: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=80')" role="img" aria-label="Tokyo, Japan">
+
+      <div class="dest-card dest-tall" data-dest="tokyo" style="--img: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=80')" role="img" aria-label="Tokyo, Japan">
         <div class="dest-overlay"></div>
         <div class="dest-info">
-          <span class="dest-price">from $847</span>
           <div class="dest-name">Tokyo</div>
-          <div class="dest-sub">Japan · 14 hr flight</div>
+          <div class="dest-sub">Japan</div>
         </div>
       </div>
-      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Santorini, Greece">
+
+      <div class="dest-card" data-dest="santorini" style="--img: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Santorini, Greece">
         <div class="dest-overlay"></div>
         <div class="dest-info">
-          <span class="dest-price">from $620</span>
           <div class="dest-name">Santorini</div>
-          <div class="dest-sub">Greece · 10 hr flight</div>
+          <div class="dest-sub">Greece</div>
         </div>
       </div>
-      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1499856871958-5b9357976b82?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Paris, France">
+
+      <div class="dest-card" data-dest="paris" style="--img: url('https://images.unsplash.com/photo-1499856871958-5b9357976b82?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Paris, France">
         <div class="dest-overlay"></div>
         <div class="dest-info">
-          <span class="dest-price">from $340</span>
           <div class="dest-name">Paris</div>
-          <div class="dest-sub">France · 8 hr flight</div>
+          <div class="dest-sub">France</div>
         </div>
       </div>
-      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1537953773345-d172ccf13cf4?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Bali, Indonesia">
+
+      <div class="dest-card" data-dest="bali" style="--img: url('https://images.unsplash.com/photo-1537953773345-d172ccf13cf4?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Bali, Indonesia">
         <div class="dest-overlay"></div>
         <div class="dest-info">
-          <span class="dest-price">from $520</span>
           <div class="dest-name">Bali</div>
-          <div class="dest-sub">Indonesia · 22 hr flight</div>
+          <div class="dest-sub">Indonesia</div>
         </div>
       </div>
-      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Dubai, UAE">
+
+      <div class="dest-card" data-dest="dubai" style="--img: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Dubai, UAE">
         <div class="dest-overlay"></div>
         <div class="dest-info">
-          <span class="dest-price">from $680</span>
           <div class="dest-name">Dubai</div>
-          <div class="dest-sub">UAE · 13 hr flight</div>
+          <div class="dest-sub">United Arab Emirates</div>
         </div>
+      </div>
+
+      <div class="dest-card dest-banner" data-dest="nyc" style="--img: url('https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?auto=format&fit=crop&w=1400&q=80')" role="img" aria-label="New York City, USA">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <div class="dest-name">New York City</div>
+          <div class="dest-sub">United States</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Infinite scrolling destination ticker -->
+    <div class="dest-ticker" aria-hidden="true">
+      <div class="ticker-track">
+        <span class="ticker-item">Tokyo</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Paris</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Bali</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Santorini</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">New York</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Dubai</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Maldives</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Kyoto</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Amalfi Coast</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Marrakech</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Cape Town</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Reykjavik</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Lisbon</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Bangkok</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Barcelona</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Buenos Aires</span><span class="ticker-dot">·</span>
+        <!-- duplicate for seamless loop -->
+        <span class="ticker-item">Tokyo</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Paris</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Bali</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Santorini</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">New York</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Dubai</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Maldives</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Kyoto</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Amalfi Coast</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Marrakech</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Cape Town</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Reykjavik</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Lisbon</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Bangkok</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Barcelona</span><span class="ticker-dot">·</span>
+        <span class="ticker-item">Buenos Aires</span><span class="ticker-dot">·</span>
       </div>
     </div>
   </section>
@@ -534,28 +582,57 @@
       magnetic('.feat-card', 10, 8);
 
       // ─────────────────────────────────────────────────────────────
-      // 9. DESTINATION CARDS — stagger up from Z depth
+      // 9. DESTINATION CARDS — each card its own cinematic entrance
       // ─────────────────────────────────────────────────────────────
-      const destCards = document.querySelectorAll('.dest-card');
-      destCards.forEach((card, i) => {
+
+      // Per-card initial 3D states — all completely different
+      const destFroms = [
+        // Tokyo (tall): door hinge from right — left edge stays, right swings toward you
+        { transformPerspective: 1200, rotateY: 78, x: 60, opacity: 0, transformOrigin: 'left center', ease: 'power3.out', duration: 1.3 },
+        // Santorini: tumbles in from top-right corner, spinning
+        { transformPerspective: 900, x: 220, y: -160, rotateZ: 22, rotateX: -18, opacity: 0, ease: 'power3.out', duration: 1.1 },
+        // Paris: slides in from the right wall with depth tilt
+        { transformPerspective: 900, x: 280, rotateY: 45, z: -120, opacity: 0, ease: 'power3.out', duration: 1.1 },
+        // Bali: card flips up from below like a playing card thrown face-up
+        { transformPerspective: 900, y: 180, rotateX: -82, z: -60, opacity: 0, ease: 'power3.out', duration: 1.1 },
+        // Dubai: rockets in from far back in space — overshoot with elastic
+        { transformPerspective: 1000, z: -700, scale: 0.25, rotateX: 20, opacity: 0, ease: 'elastic.out(1, 0.6)', duration: 1.5 },
+        // NYC (banner): rises from below with spin
+        { transformPerspective: 900, y: 140, rotateZ: -6, z: -80, opacity: 0, ease: 'power3.out', duration: 1.0 },
+      ];
+
+      document.querySelectorAll('.dest-card').forEach((card, i) => {
+        const { ease, duration, transformOrigin, ...fromVars } = destFroms[i] || destFroms[0];
+        if (transformOrigin) gsap.set(card, { transformOrigin });
         gsap.from(card, {
-          z: -180 - i * 40,
-          opacity: 0,
-          scale: 0.88,
-          rotateX: 12,
-          transformPerspective: 900,
-          duration: 1.0,
-          ease: 'power3.out',
-          delay: i * 0.09,
+          ...fromVars,
+          duration,
+          ease,
+          delay: i * 0.11,
           scrollTrigger: {
             trigger: '.dest-grid',
-            start: 'top 74%',
+            start: 'top 72%',
             toggleActions: 'play none none reverse'
           }
         });
       });
 
-      magnetic('.dest-card', 8, 12);
+      // Photo parallax — the image inside each card shifts on scroll, making it feel alive
+      ScrollTrigger.create({
+        trigger: '.dest-grid',
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: (self) => {
+          const p = self.progress;
+          document.querySelectorAll('.dest-card').forEach((card, i) => {
+            const range = 22 + i * 4;
+            const offset = (p - 0.5) * range;
+            card.style.backgroundPositionY = `calc(50% + ${offset}px)`;
+          });
+        }
+      });
+
+      magnetic('.dest-card', 7, 14);
 
       // ─────────────────────────────────────────────────────────────
       // 10. STATS — count up numbers on scroll
