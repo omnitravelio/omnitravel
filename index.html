@@ -38,11 +38,11 @@
 
     <div class="social-proof reveal" style="--d:.34s">
       <div class="avatars">
-        <div class="av av1">A</div>
-        <div class="av av2">J</div>
-        <div class="av av3">M</div>
-        <div class="av av4">R</div>
-        <div class="av av5">K</div>
+        <div class="av av1"><img src="https://i.pravatar.cc/40?img=47" alt="" loading="lazy" /></div>
+        <div class="av av2"><img src="https://i.pravatar.cc/40?img=12" alt="" loading="lazy" /></div>
+        <div class="av av3"><img src="https://i.pravatar.cc/40?img=28" alt="" loading="lazy" /></div>
+        <div class="av av4"><img src="https://i.pravatar.cc/40?img=33" alt="" loading="lazy" /></div>
+        <div class="av av5"><img src="https://i.pravatar.cc/40?img=55" alt="" loading="lazy" /></div>
       </div>
       <p><strong>500+</strong> travelers already on the waitlist</p>
     </div>
@@ -118,6 +118,26 @@
     </div>
   </section>
 
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-num">190+</div>
+      <div class="stat-label">Countries covered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">400+</div>
+      <div class="stat-label">Airlines integrated</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">2M+</div>
+      <div class="stat-label">Hotels &amp; rentals</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">$0</div>
+      <div class="stat-label">Booking fees, ever</div>
+    </div>
+  </div>
+
   <!-- PROBLEM -->
   <section class="content problem-wrap">
     <div class="eyebrow reveal">The problem</div>
@@ -180,6 +200,55 @@
         </div>
         <h3>One-tap booking</h3>
         <p>Approve your itinerary and book everything in a single confirmation. No more tab switching.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DESTINATIONS -->
+  <section class="content" style="padding-top: 0">
+    <div class="eyebrow reveal">Popular routes</div>
+    <h2 class="section-h reveal">Anywhere you want to go.</h2>
+    <p class="section-p reveal">Real flights. Real hotels. Real prices. OmniTravel connects to live inventory across 400+ airlines and 2 million properties worldwide.</p>
+    <div class="dest-grid">
+      <div class="dest-card dest-tall" style="--img: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?auto=format&fit=crop&w=900&q=80')" role="img" aria-label="Tokyo, Japan">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <span class="dest-price">from $847</span>
+          <div class="dest-name">Tokyo</div>
+          <div class="dest-sub">Japan · 14 hr flight</div>
+        </div>
+      </div>
+      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Santorini, Greece">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <span class="dest-price">from $620</span>
+          <div class="dest-name">Santorini</div>
+          <div class="dest-sub">Greece · 10 hr flight</div>
+        </div>
+      </div>
+      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1499856871958-5b9357976b82?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Paris, France">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <span class="dest-price">from $340</span>
+          <div class="dest-name">Paris</div>
+          <div class="dest-sub">France · 8 hr flight</div>
+        </div>
+      </div>
+      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1537953773345-d172ccf13cf4?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Bali, Indonesia">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <span class="dest-price">from $520</span>
+          <div class="dest-name">Bali</div>
+          <div class="dest-sub">Indonesia · 22 hr flight</div>
+        </div>
+      </div>
+      <div class="dest-card" style="--img: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=700&q=80')" role="img" aria-label="Dubai, UAE">
+        <div class="dest-overlay"></div>
+        <div class="dest-info">
+          <span class="dest-price">from $680</span>
+          <div class="dest-name">Dubai</div>
+          <div class="dest-sub">UAE · 13 hr flight</div>
+        </div>
       </div>
     </div>
   </section>
@@ -465,7 +534,47 @@
       magnetic('.feat-card', 10, 8);
 
       // ─────────────────────────────────────────────────────────────
-      // 9. AMBIENT — orb drifts slowly, non-repeating loop
+      // 9. DESTINATION CARDS — stagger up from Z depth
+      // ─────────────────────────────────────────────────────────────
+      const destCards = document.querySelectorAll('.dest-card');
+      destCards.forEach((card, i) => {
+        gsap.from(card, {
+          z: -180 - i * 40,
+          opacity: 0,
+          scale: 0.88,
+          rotateX: 12,
+          transformPerspective: 900,
+          duration: 1.0,
+          ease: 'power3.out',
+          delay: i * 0.09,
+          scrollTrigger: {
+            trigger: '.dest-grid',
+            start: 'top 74%',
+            toggleActions: 'play none none reverse'
+          }
+        });
+      });
+
+      magnetic('.dest-card', 8, 12);
+
+      // ─────────────────────────────────────────────────────────────
+      // 10. STATS — count up numbers on scroll
+      // ─────────────────────────────────────────────────────────────
+      document.querySelectorAll('.stat-num').forEach(el => {
+        gsap.from(el, {
+          opacity: 0, y: 20,
+          duration: 0.7,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.stats-row',
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        });
+      });
+
+      // ─────────────────────────────────────────────────────────────
+      // 11. AMBIENT — orb drifts slowly
       // ─────────────────────────────────────────────────────────────
       gsap.to('.orb1', {
         x: 60, y: -50, duration: 8,
