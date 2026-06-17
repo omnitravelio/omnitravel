@@ -42,37 +42,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---------- REVEAL SYSTEM ---------- */
-.reveal {
-  opacity: 0;
-  transform: perspective(900px) rotateX(10deg) translateY(24px);
-  transition:
-    opacity 0.75s var(--ease-flow),
-    transform 0.9s var(--ease-flow);
-  transition-delay: var(--d, 0s);
-  will-change: transform, opacity;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: perspective(900px) rotateX(0deg) translateY(0);
-}
-.reveal-left  {
-  transform: perspective(900px) rotateY(-12deg) translateX(-32px);
-}
-.reveal-left.visible {
-  transform: perspective(900px) rotateY(0deg) translateX(0);
-}
-.reveal-right {
-  transform: perspective(900px) rotateY(12deg) translateX(32px);
-}
-.reveal-right.visible {
-  transform: perspective(900px) rotateY(0deg) translateX(0);
-}
-.reveal-scale {
-  transform: perspective(900px) rotateX(12deg) scale(0.92);
-}
-.reveal-scale.visible {
-  transform: perspective(900px) rotateX(0deg) scale(1);
+/* ---------- REVEAL (GSAP takes over for motion; CSS fallback for reduced-motion) ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .reveal-left, .reveal-right, .reveal-scale { opacity: 1 !important; transform: none !important; }
 }
 
 /* ---------- NAV ---------- */
@@ -138,6 +110,24 @@ nav button:hover { color: var(--text1); }
   inset: 0;
   pointer-events: none;
   overflow: hidden;
+  z-index: 0;
+}
+
+/* 3D perspective floor grid — sits behind hero content */
+.grid-floor {
+  position: absolute;
+  width: 220%;
+  height: 180%;
+  left: -60%;
+  top: 38%;
+  background-image:
+    linear-gradient(rgba(200, 150, 58, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(200, 150, 58, 0.07) 1px, transparent 1px);
+  background-size: 72px 72px;
+  transform: perspective(420px) rotateX(68deg);
+  transform-origin: top center;
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 5%, black 20%, transparent 75%);
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 5%, black 20%, transparent 75%);
   z-index: 0;
 }
 
@@ -310,9 +300,7 @@ nav button:hover { color: var(--text1); }
   border-radius: 20px;
   padding: 1px;
   transform-origin: center bottom;
-  transform: rotateX(14deg);
-  transition: transform 0.1s linear;
-  will-change: transform;
+  will-change: transform, opacity;
 }
 .mockup-inner {
   background: #0f0d0b;
@@ -626,10 +614,6 @@ footer button:hover { color: var(--text2); }
 /* ---------- REDUCED MOTION ---------- */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .reveal {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-  .orb, .orb1, .cta-orb, .hero-visual.visible { transform: none !important; }
+  * { animation: none !important; transition: none !important; }
+  .mockup-wrap { transform: none !important; opacity: 1 !important; }
 }

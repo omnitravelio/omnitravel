@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 </head>
 <body>
 
@@ -19,7 +21,8 @@
   <!-- HERO -->
   <section class="hero">
     <div class="glow-bg">
-      <div class="orb orb1" data-parallax="0.12"></div>
+      <div class="grid-floor"></div>
+      <div class="orb orb1"></div>
     </div>
 
     <div class="hero-badge reveal" style="--d:0s">Flights · Hotels · Activities — one booking</div>
@@ -246,118 +249,229 @@
   <script>
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // ── Scroll-triggered 3D reveals ──────────────────────────────
-    const reveals = document.querySelectorAll('.reveal');
     if (reduceMotion) {
-      reveals.forEach(el => el.classList.add('visible'));
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
     } else {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible');
-            observer.unobserve(e.target);
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      // All .reveal elements hand control to GSAP — bypass CSS reveal system
+      document.querySelectorAll('.reveal').forEach(el => {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+
+      // ─────────────────────────────────────────────────────────────
+      // 1. HERO INTRO — words fly forward from deep Z-space on load
+      // ─────────────────────────────────────────────────────────────
+      gsap.set('.hero-badge',  { opacity: 0, z: -600, rotateX: 35, transformPerspective: 1000 });
+      gsap.set('.hero h1',     { opacity: 0, z: -900, rotateX: 22, transformPerspective: 1200 });
+      gsap.set('.hero-sub',    { opacity: 0, z: -500, rotateX: 15, transformPerspective: 1000 });
+      gsap.set('.hero .form-row', { opacity: 0, y: 50 });
+      gsap.set('.hero .hint',     { opacity: 0 });
+      gsap.set('.social-proof', { opacity: 0, y: 30 });
+
+      gsap.timeline({ delay: 0.2 })
+        .to('.hero-badge', { opacity: 1, z: 0, rotateX: 0, duration: 1.1, ease: 'power3.out' })
+        .to('.hero h1',    { opacity: 1, z: 0, rotateX: 0, duration: 1.3, ease: 'power3.out' }, '-=0.8')
+        .to('.hero-sub',   { opacity: 1, z: 0, rotateX: 0, duration: 1.0, ease: 'power3.out' }, '-=0.85')
+        .to('.hero .form-row', { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '-=0.6')
+        .to('.hero .hint',     { opacity: 1, duration: 0.5 }, '-=0.3')
+        .to('.social-proof', { opacity: 1, y: 0, duration: 0.7, ease: 'power2.out' }, '-=0.4');
+
+      // ─────────────────────────────────────────────────────────────
+      // 2. HERO MOCKUP — pinned laptop-opening flip (THE BIG WOW)
+      //    User scrolls 700px while hero is pinned;
+      //    mockup rotates from flat (65°) to face-on (0°)
+      // ─────────────────────────────────────────────────────────────
+      gsap.set('.mockup-wrap', {
+        rotateX: 65,
+        opacity: 0.5,
+        transformOrigin: 'center bottom',
+        transformPerspective: 1100
+      });
+
+      gsap.to('.mockup-wrap', {
+        rotateX: 0,
+        opacity: 1,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.hero',
+          start: 'center center',
+          end: '+=700',
+          pin: true,
+          scrub: 1.8,
+          anticipatePin: 1
+        }
+      });
+
+      // ─────────────────────────────────────────────────────────────
+      // 3. PROBLEM SECTION — cards fan out from a stacked 3D pile
+      // ─────────────────────────────────────────────────────────────
+      gsap.set('.pain-card:nth-child(1)', {
+        transformPerspective: 900, rotateY: -35, rotateZ: -6, z: -180, opacity: 0, scale: 0.85
+      });
+      gsap.set('.pain-card:nth-child(2)', {
+        transformPerspective: 900, rotateY: 0,   rotateZ: 0,  z: -280, opacity: 0, scale: 0.8
+      });
+      gsap.set('.pain-card:nth-child(3)', {
+        transformPerspective: 900, rotateY: 35,  rotateZ: 6,  z: -180, opacity: 0, scale: 0.85
+      });
+
+      gsap.to('.pain-card', {
+        rotateY: 0, rotateZ: 0, z: 0, opacity: 1, scale: 1,
+        duration: 1.3,
+        stagger: 0.12,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.pain-grid',
+          start: 'top 72%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+
+      // ─────────────────────────────────────────────────────────────
+      // 4. FEATURE GRID — each card from a different extreme angle
+      // ─────────────────────────────────────────────────────────────
+      const featAngles = [
+        { x: -160, rotateY: -90, z: -200 },  // top-left: from left wall
+        { x:  160, rotateY:  90, z: -200 },  // top-right: from right wall
+        { y:  120, rotateX:  80, z: -300 },  // bottom-left: from floor
+        { z: -600, scale: 0.4, rotateX: 20 } // bottom-right: from far back
+      ];
+
+      document.querySelectorAll('.feat-card').forEach((card, i) => {
+        gsap.set(card, { transformPerspective: 1000, opacity: 0, ...featAngles[i] });
+        gsap.to(card, {
+          x: 0, y: 0, z: 0, rotateX: 0, rotateY: 0, opacity: 1, scale: 1,
+          duration: 1.1,
+          ease: 'power3.out',
+          delay: i * 0.1,
+          scrollTrigger: {
+            trigger: '.feat-grid',
+            start: 'top 70%',
+            toggleActions: 'play none none reverse'
           }
         });
-      }, { threshold: 0.10, rootMargin: '0px 0px -6% 0px' });
-      reveals.forEach(el => observer.observe(el));
-    }
+      });
 
-    if (!reduceMotion) {
-      const mockupWrap   = document.querySelector('.mockup-wrap');
-      const heroVisual   = document.querySelector('.hero-visual');
-      const orbEl        = document.querySelector('.orb1');
-      const ctaOrb       = document.querySelector('.cta-orb');
-
-      // ── Scroll-driven 3D engine ──────────────────────────────────
-      let ticking = false;
-
-      function onScroll() {
-        if (ticking) return;
-        requestAnimationFrame(frame);
-        ticking = true;
-      }
-
-      function frame() {
-        const sy = window.scrollY;
-        const vh = window.innerHeight;
-
-        // Mockup laptop-tilt: flattens from 14° → 0° as it enters viewport
-        if (mockupWrap && heroVisual) {
-          const rect = heroVisual.getBoundingClientRect();
-          // progress: 0 when mockup top is at viewport bottom, 1 when fully in view
-          const progress = Math.max(0, Math.min(1, (vh - rect.top) / (vh * 0.65)));
-          const tilt = 14 * (1 - progress);
-          mockupWrap.style.transform = `rotateX(${tilt}deg)`;
-        }
-
-        // Orb parallax
-        if (orbEl)  orbEl.style.transform  = `translateY(${sy * 0.14}px)`;
-        if (ctaOrb) ctaOrb.style.transform = `translateY(${sy * 0.08}px)`;
-
-        // Section depth parallax — headings move slightly slower than scroll
-        document.querySelectorAll('.section-h').forEach(el => {
-          const rect = el.getBoundingClientRect();
-          const dist = (rect.top - vh * 0.5) / vh;
-          el.style.transform = `translateZ(0) translateY(${dist * -14}px)`;
+      // ─────────────────────────────────────────────────────────────
+      // 5. HOW IT WORKS steps — flip in like turning pages
+      // ─────────────────────────────────────────────────────────────
+      document.querySelectorAll('.step').forEach((step, i) => {
+        gsap.from(step, {
+          rotateX: 55,
+          z: -350,
+          opacity: 0,
+          transformPerspective: 900,
+          duration: 1.0,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: step,
+            start: 'top 82%',
+            toggleActions: 'play none none reverse'
+          },
+          delay: i * 0.07
         });
+      });
 
-        ticking = false;
-      }
+      // ─────────────────────────────────────────────────────────────
+      // 6. SECTION HEADINGS — emerge from Z-depth
+      // ─────────────────────────────────────────────────────────────
+      document.querySelectorAll('.section-h, .eyebrow').forEach(el => {
+        gsap.from(el, {
+          z: -300, opacity: 0, rotateX: 18,
+          transformPerspective: 900,
+          duration: 0.9,
+          ease: 'power3.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 82%',
+            toggleActions: 'play none none reverse'
+          }
+        });
+      });
 
-      window.addEventListener('scroll', onScroll, { passive: true });
-      frame();
+      document.querySelectorAll('.section-p').forEach(el => {
+        gsap.from(el, {
+          z: -200, opacity: 0,
+          transformPerspective: 800,
+          duration: 0.8,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            toggleActions: 'play none none reverse'
+          }
+        });
+      });
 
-      // ── Magnetic 3D hover on cards ───────────────────────────────
-      function addMagneticTilt(selector, maxRotate = 10, lift = 8) {
+      // ─────────────────────────────────────────────────────────────
+      // 7. CTA — headline travels from 800px deep in space
+      // ─────────────────────────────────────────────────────────────
+      gsap.from('.cta-section h2', {
+        z: -800, opacity: 0, rotateX: 30,
+        transformPerspective: 1400,
+        duration: 1.5,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: '.cta-section',
+          start: 'top 68%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+
+      gsap.from('.cta-section p', {
+        z: -400, opacity: 0,
+        transformPerspective: 1000,
+        duration: 1.0,
+        ease: 'power2.out',
+        delay: 0.2,
+        scrollTrigger: {
+          trigger: '.cta-section',
+          start: 'top 68%',
+          toggleActions: 'play none none reverse'
+        }
+      });
+
+      // ─────────────────────────────────────────────────────────────
+      // 8. MAGNETIC HOVER — real-time cursor-tracked 3D tilt
+      // ─────────────────────────────────────────────────────────────
+      function magnetic(selector, rotMax, lift) {
         document.querySelectorAll(selector).forEach(card => {
-          card.addEventListener('mouseenter', () => {
-            card.style.transition = 'none';
-          });
           card.addEventListener('mousemove', e => {
-            const r   = card.getBoundingClientRect();
-            const x   = (e.clientX - r.left) / r.width  - 0.5;
-            const y   = (e.clientY - r.top)  / r.height - 0.5;
-            const rY  =  x * maxRotate;
-            const rX  = -y * (maxRotate * 0.7);
-            card.style.transform =
-              `perspective(700px) rotateX(${rX}deg) rotateY(${rY}deg) translateZ(${lift}px)`;
+            const r = card.getBoundingClientRect();
+            const x = (e.clientX - r.left) / r.width  - 0.5;
+            const y = (e.clientY - r.top)  / r.height - 0.5;
+            gsap.to(card, {
+              rotateY: x * rotMax * 2,
+              rotateX: -y * rotMax,
+              z: lift,
+              transformPerspective: 700,
+              duration: 0.25,
+              ease: 'power2.out'
+            });
           });
           card.addEventListener('mouseleave', () => {
-            card.style.transition = 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)';
-            card.style.transform  = '';
+            gsap.to(card, {
+              rotateY: 0, rotateX: 0, z: 0,
+              duration: 0.7, ease: 'power3.out'
+            });
           });
         });
       }
 
-      addMagneticTilt('.pain-card', 10, 6);
-      addMagneticTilt('.feat-card', 8,  5);
+      magnetic('.pain-card', 14, 10);
+      magnetic('.feat-card', 10, 8);
 
-      // ── Pain cards stagger Z-depth on scroll ─────────────────────
-      const painCards = document.querySelectorAll('.pain-card');
-      const painObserver = new IntersectionObserver(entries => {
-        entries.forEach(e => {
-          if (e.isIntersecting) {
-            const cards = [...painCards];
-            cards.forEach((card, i) => {
-              setTimeout(() => {
-                card.style.transition = `transform 0.9s cubic-bezier(0.16,1,0.3,1) ${i * 80}ms,
-                                         opacity  0.8s ease ${i * 80}ms`;
-                card.style.opacity   = '1';
-                card.style.transform = 'perspective(800px) rotateX(0deg) translateZ(0)';
-              }, i * 60);
-            });
-            painObserver.disconnect();
-          }
-        });
-      }, { threshold: 0.15 });
-
-      // Set initial 3D state before observe
-      painCards.forEach((card, i) => {
-        const depths = [24, 16, 32];
-        card.style.opacity   = '0';
-        card.style.transform = `perspective(800px) rotateX(${6 + i}deg) translateZ(-${depths[i] || 20}px)`;
+      // ─────────────────────────────────────────────────────────────
+      // 9. AMBIENT — orb drifts slowly, non-repeating loop
+      // ─────────────────────────────────────────────────────────────
+      gsap.to('.orb1', {
+        x: 60, y: -50, duration: 8,
+        ease: 'sine.inOut', yoyo: true, repeat: -1
       });
-      if (painCards[0]) painObserver.observe(painCards[0].closest('.pain-grid'));
+
     }
 
     // Brevo hosted-form endpoint. This is a public form URL (safe to expose),
